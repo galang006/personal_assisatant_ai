@@ -27,34 +27,53 @@ class ChromaChatHistoryManager:
         }
         searchable_text = f"{role}: {content}"
 
-        self.store.add_texts([searchable_text], [metadata], [message_id])
-        return True
+        try:
+            self.store.add_texts(
+                texts=[searchable_text],
+                metadatas=[metadata],
+                ids=[message_id]
+            )
+            return True
+        except Exception as e:
+            print(f"Error saving message: {e}")
+            return False
     
-    def search_memory(self, query: str,session_id: str = None, k: int = 5) -> List[Dict]:
-        filter_dict = {"session_id":session_id} if session_id else {}
-        results =  self.store.similarity_search(query=query, k=k, filter=filter_dict)
-        return [
-            {"content": r.page_content, "metadata": r.metadata, "relevance_score": "high"}
-            for r in results
-        ]
+    def search_memories(self, query: str,session_id: str = None, k: int = 5) -> List[Dict]:
+        try:
+            filter_dict = {"session_id":session_id} if session_id else {}
+            results =  self.store.similarity_search(query=query, k=k, filter=filter_dict)
+            return [
+                {"content": r.page_content, "metadata": r.metadata, "relevance_score": "high"}
+                for r in results
+            ]
+        
+        except Exception as e:
+            print(f"Error searching memories: {e}")
+            return []
     
     def get_session_history(self, session_id: str, limit: int = 50) -> List[Dict]:
-        results = self.store.get(
-            where= {"session_id": session_id},
-            limit= limit,
-            include=["metadata", "documents"]
-        )
+        try:
+            results = self.store.get(
+                where= {"session_id": session_id},
+                limit= limit,
+                include=["metadatas", "documents"]
+            )
 
-        messages = [
-            {
-                "role": m["role"],
-                "content": d[len(m["role"]) + 2:] if d.startswith(m["role"] + ": ") else d,
-                "timestamp": m["timestamp"],
-                "message_id": m["message_id"]
-            }
-            for d,m in zip(results["documents"], results["metadata"])
-        ]
+            messages = [
+                {
+                    "role": m["role"],
+                    "content": d[len(m["role"]) + 2:] if d.startswith(m["role"] + ": ") else d,
+                    "timestamp": m["timestamp"],
+                    "message_id": m["message_id"]
+                }
+                for d,m in zip(results["documents"], results["metadatas"])
+            ]
 
-        messages.sort(key=lambda x: x["timestamp"])
+            messages.sort(key=lambda x: x["timestamp"])
 
-        return messages
+            return messages
+        
+        except Exception as e:
+            print(f"Error retrieving history: {e}")
+            return []
+    
