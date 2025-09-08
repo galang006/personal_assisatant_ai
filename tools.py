@@ -3,8 +3,11 @@ from langchain.tools import tool
 from memory_manager import ChromaChatHistoryManager
 from config import DEFAULT_SESSION
 import requests
-from langchain.pydantic_v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 from langchain_community.tools.tavily_search import TavilySearchResults
+from dotenv import load_dotenv
+
+load_dotenv()
 
 chat_manager = ChromaChatHistoryManager()
 
@@ -35,7 +38,6 @@ def wikipedia_text_exporter(article: str) -> str:
     URL = "https://en.wikipedia.org/w/api.php"
     HEADERS = {"User-Agent": "MyBot/1.0"}
     
-    # First, search for the article
     params = {
         "action": "query",
         "list": "search",
@@ -49,7 +51,6 @@ def wikipedia_text_exporter(article: str) -> str:
     except (KeyError, IndexError, requests.exceptions.RequestException):
         return f"No Wikipedia article found for '{article}'"
     
-    # Then get the extract
     extract_params = {
         "action": "query",
         "prop": "extracts",
