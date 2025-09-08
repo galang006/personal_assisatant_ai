@@ -33,7 +33,7 @@ To set up and run the Personal AI Assistant Chatbot, follow these steps:
     ```
 
 3.  **Install Python Dependencies:**
-    Install the necessary Python libraries. Since no `requirements.txt` is provided, you'll need to install them manually:
+
     ```bash
     pip install langchain langchain-chroma langchain-ollama python-dotenv chromadb==0.4.24 # Specify chromadb version for compatibility
     ```
