@@ -8,4 +8,3 @@ load_dotenv()
 if __name__ == "__main__":
     os.system("cls" if os.name == "nt" else "clear")
     chat_with_assistant()
-    #test_direct_chroma("Large Language Model")
