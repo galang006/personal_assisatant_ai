@@ -38,9 +38,9 @@ class ChromaChatHistoryManager:
             print(f"Error saving message: {e}")
             return False
     
-    def search_memories(self, query: str,session_id: str = None, k: int = 5) -> List[Dict]:
+    def search_memories(self, query: str, session_id: str = None, k: int = 5) -> List[Dict]:
         try:
-            filter_dict = {"session_id":session_id} if session_id else {}
+            filter_dict = {"session_id":session_id} if session_id else None
             results =  self.store.similarity_search(query=query, k=k, filter=filter_dict)
             return [
                 {"content": r.page_content, "metadata": r.metadata, "relevance_score": "high"}
