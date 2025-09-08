@@ -25,6 +25,12 @@ AGENT_PROMPT = """
 
     {tools}
 
+    Guidelines for tool usage:
+    - Use **wikipedia_text_exporter** when the user asks about general knowledge, concepts, people, places, or historical topics that are likely to be covered in Wikipedia.
+    - Use **search_web** when the user asks about current events, real-time data, news, or anything that may have changed recently or is not in Wikipedia.
+    - Use **search_memory** when you need to recall details about the users preferences, past projects, hobbies, or saved facts.
+    - Use **save_memory** whenever the user shares new personal information worth remembering (see RULES above).
+
     To use a tool, please use the following format:
 
     ```

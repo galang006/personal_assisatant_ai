@@ -1,13 +1,13 @@
 from langchain_ollama import ChatOllama
 from langchain.prompts import PromptTemplate
 from langchain.agents import AgentExecutor, create_react_agent
-from tools import save_memory, search_memory
+from tools import save_memory, search_memory, wikipedia_text_exporter, search_web
 from config import LLM_MODEL, AGENT_PROMPT
 from langchain.callbacks import LangChainTracer
 
 def create_memory_agent():
     llm = ChatOllama(model=LLM_MODEL, temperature=0)
-    tools = [save_memory, search_memory]
+    tools = [save_memory, search_memory, wikipedia_text_exporter, search_web]
 
     promt = PromptTemplate(
         template=AGENT_PROMPT,
