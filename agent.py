@@ -3,6 +3,7 @@ from langchain.prompts import PromptTemplate
 from langchain.agents import AgentExecutor, create_react_agent
 from tools import save_memory, search_memory
 from config import LLM_MODEL, AGENT_PROMPT
+from langchain.callbacks import LangChainTracer
 
 def create_memory_agent():
     llm = ChatOllama(model=LLM_MODEL, temperature=0)
@@ -12,7 +13,7 @@ def create_memory_agent():
         template=AGENT_PROMPT,
         input_variables=["tools", "tool_names", "chat_history", "input", "agent_scratchpad"],
     )
-
+    
     agent = create_react_agent(llm, tools, promt)
 
     return AgentExecutor(
@@ -21,5 +22,5 @@ def create_memory_agent():
         #verbose=True
         max_iterations=5,
         #max_execution_time=30,
-        handle_parsing_errors=True
+        handle_parsing_errors=True,
     )
